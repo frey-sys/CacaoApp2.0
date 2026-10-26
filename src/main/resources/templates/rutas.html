@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Rutas | CacaoApp</title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body class="app-page"><div class="app-shell">
+    <div th:replace="~{fragments :: sidebar(${activePage}, ${userName})}"></div>
+    <main class="main-content"><header class="topbar"><div class="mobile-brand"><span>🌿</span> CacaoApp</div><div class="breadcrumb">Gestión <span>/</span> Rutas</div><div class="topbar-user"><span class="online-dot"></span> En línea</div></header>
+        <div class="page-content"><div th:replace="~{fragments :: flashes}"></div>
+            <div class="page-heading"><div><span class="eyebrow green-eyebrow">RECORRIDOS DE RECOLECCIÓN</span><h1>Mis rutas</h1><p>Organiza recorridos asociados a tus fincas.</p></div><span class="heading-emoji">🛣️</span></div>
+            <div class="content-grid">
+                <section class="panel form-panel"><div class="panel-heading"><span class="panel-icon blue-icon">↗</span><div><h2>Nueva ruta</h2><p>Selecciona una finca y registra tu recorrido.</p></div></div>
+                    <div class="empty-inline" th:if="${#lists.isEmpty(fincas)}">Primero registra una finca para poder guardar rutas. <a th:href="@{/fincas}">Ir a mis fincas →</a></div>
+                    <form th:unless="${#lists.isEmpty(fincas)}" th:action="@{/rutas}" method="post" class="form-stack" data-route-form>
+                        <label for="fincaId">Selecciona una finca</label><select id="fincaId" name="fincaId" required><option value="">Elige una finca</option><option th:each="finca : ${fincas}" th:value="${finca.id}" th:text="${finca.nombre}"></option></select>
+                        <label for="nombre">Nombre de la ruta</label><input id="nombre" name="nombre" type="text" maxlength="100" placeholder="Ej. Recolección sector norte" required>
+                        <div class="recording-card"><div class="recording-top"><span class="recording-pin">⌖</span><div><strong>Puntos del recorrido</strong><small>La grabación de demostración cuenta puntos en pantalla.</small></div></div><div class="recording-count" data-route-count>0</div><input type="hidden" name="puntos" value="0" data-route-points><button type="button" class="button button-soft button-full" data-route-start>▶ Iniciar grabación</button><p class="recording-note" data-route-status>Listo para comenzar</p></div>
+                        <button class="button button-primary button-full" type="submit">Guardar ruta <span>→</span></button>
+                    </form>
+                </section>
+                <section class="panel list-panel"><div class="panel-heading"><span class="panel-icon pale-blue-icon">🛣️</span><div><h2>Rutas guardadas</h2><p><span th:text="${rutas.size()}">0</span> recorridos</p></div></div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(rutas)}"><span>🛣️</span><strong>Aún no tienes rutas</strong><p>Cuando guardes un recorrido aparecerá aquí.</p></div>
+                    <article class="route-card" th:each="ruta : ${rutas}"><div class="farm-card-top"><div class="route-symbol">↗</div><div class="farm-title"><h3 th:text="${ruta.nombre}">Ruta</h3><span>Finca: <b th:text="${ruta.finca.nombre}">Finca</b></span></div><form th:action="@{/rutas/{id}/eliminar(id=${ruta.id})}" method="post" data-confirm="¿Eliminar esta ruta?"><button class="icon-button delete-icon" type="submit" aria-label="Eliminar ruta">⌫</button></form></div><div class="route-meta"><span>⌖ <b th:text="${ruta.puntos}">0</b> puntos GPS</span><span class="saved-tag">Guardada</span></div></article>
+                </section>
+            </div>
+        </div>
+    </main>
+</div><script th:src="@{/js/app.js}"></script></body></html>

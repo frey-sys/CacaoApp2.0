@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Calidad del grano | CacaoApp</title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body class="app-page"><div class="app-shell">
+    <div th:replace="~{fragments :: sidebar(${activePage}, ${userName})}"></div>
+    <main class="main-content"><header class="topbar"><div class="mobile-brand"><span>🌿</span> CacaoApp</div><div class="breadcrumb">Gestión <span>/</span> Calidad del grano</div><div class="topbar-user"><span class="online-dot"></span> En línea</div></header>
+        <div class="page-content"><div th:replace="~{fragments :: flashes}"></div>
+            <div class="page-heading"><div><span class="eyebrow green-eyebrow">CUIDAMOS CADA COSECHA</span><h1>Calidad del grano</h1><p>Registra y consulta los parámetros de calidad de tu cacao.</p></div><span class="heading-emoji">🍫</span></div>
+            <details class="info-cultivo"><summary><span>📚</span><strong>¿Cuándo está listo el cacao?</strong><span class="summary-hint">Guía rápida <b>＋</b></span></summary><div class="guide-grid"><article><h3>🌿 Condiciones de cultivo</h3><p>Temperatura: 20–30 °C</p><p>Humedad relativa: 70–90 %</p><p>Altitud recomendada: 0–900 msnm</p></article><article><h3>⏱ Fermentación</h3><p>CCN-51: 5–6 días</p><p>Cacao fino de aroma: 6–7 días</p><p>Volteo cada 24–48 horas</p></article><article><h3>💧 Secado</h3><p>Humedad final recomendada: 6–8 %</p><p>Secar gradualmente y proteger de la lluvia.</p></article></div></details>
+            <div class="content-grid quality-layout">
+                <section class="panel form-panel"><div class="panel-heading"><span class="panel-icon gold-icon">◉</span><div><h2>Nuevo registro</h2><p>Parámetros de calidad del grano.</p></div></div>
+                    <div class="empty-inline" th:if="${#lists.isEmpty(fincas)}">Primero registra una finca para asociar el análisis. <a th:href="@{/fincas}">Ir a mis fincas →</a></div>
+                    <form th:unless="${#lists.isEmpty(fincas)}" th:action="@{/calidad}" method="post" class="form-stack">
+                        <label for="fincaId">Finca</label><select id="fincaId" name="fincaId" required><option value="">Selecciona una finca</option><option th:each="finca : ${fincas}" th:value="${finca.id}" th:text="${finca.nombre}"></option></select>
+                        <label for="fecha">Fecha del análisis</label><input id="fecha" name="fecha" type="date" required>
+                        <div class="form-row"><div><label for="humedad">Humedad (%)</label><input id="humedad" name="humedad" type="number" min="0" max="100" step="0.1" placeholder="7.5" required></div><div><label for="fermentacion">Fermentación (días)</label><input id="fermentacion" name="fermentacion" type="number" min="0" max="365" placeholder="6" required></div></div>
+                        <label for="temperatura">Temperatura (°C)</label><input id="temperatura" name="temperatura" type="number" min="-50" max="150" step="0.1" placeholder="25" required>
+                        <label for="estado">Estado de fermentación</label><select id="estado" name="estado" required><option value="bien_fermentado">Bien fermentado</option><option value="parcial">Parcialmente fermentado</option><option value="sin_fermentar">Sin fermentar</option></select>
+                        <label for="observaciones">Observaciones <span class="label-hint">Opcional</span></label><textarea id="observaciones" name="observaciones" maxlength="2000" rows="3" placeholder="Notas sobre el lote..."></textarea>
+                        <button class="button button-primary button-full" type="submit">Guardar registro <span>→</span></button>
+                    </form>
+                </section>
+                <section class="panel list-panel"><div class="panel-heading"><span class="panel-icon pale-gold-icon">🍫</span><div><h2>Historial de calidad</h2><p><span th:text="${registros.size()}">0</span> análisis registrados</p></div></div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(registros)}"><span>🍫</span><strong>Sin análisis todavía</strong><p>Guarda tu primer registro de calidad.</p></div>
+                    <article class="quality-card" th:each="registro : ${registros}"><div class="quality-card-head"><div><span class="quality-farm" th:text="${registro.finca.nombre}">Finca</span><small th:text="${#dates.format(registro.fecha, 'dd/MM/yyyy')}">Fecha</small></div><span class="status-badge" th:classappend="${registro.estado == 'bien_fermentado' ? ' status-good' : (registro.estado == 'parcial' ? ' status-warning' : ' status-bad')}" th:switch="${registro.estado}"><span th:case="'bien_fermentado'">● Bien fermentado</span><span th:case="'parcial'">● Parcialmente fermentado</span><span th:case="*">● Sin fermentar</span></span></div><div class="quality-metrics"><div><strong th:text="${registro.humedad} + '%'">0%</strong><small>Humedad</small></div><div><strong th:text="${registro.fermentacion} + ' días'">0 días</strong><small>Fermentación</small></div><div><strong th:text="${registro.temperatura} + ' °C'">0 °C</strong><small>Temperatura</small></div></div><p class="quality-observations" th:if="${!#strings.isEmpty(registro.observaciones)}" th:text="${registro.observaciones}"></p><form class="quality-delete" th:action="@{/calidad/{id}/eliminar(id=${registro.id})}" method="post" data-confirm="¿Eliminar este análisis?"><button class="text-button danger-text" type="submit">Eliminar registro</button></form></article>
+                </section>
+            </div>
+        </div>
+    </main>
+</div><script th:src="@{/js/app.js}"></script></body></html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mis fincas | CacaoApp</title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body class="app-page"><div class="app-shell">
+    <div th:replace="~{fragments :: sidebar(${activePage}, ${userName})}"></div>
+    <main class="main-content"><header class="topbar"><div class="mobile-brand"><span>🌿</span> CacaoApp</div><div class="breadcrumb">Gestión <span>/</span> Mis fincas</div><div class="topbar-user"><span class="online-dot"></span> En línea</div></header>
+        <div class="page-content"><div th:replace="~{fragments :: flashes}"></div>
+            <div class="page-heading"><div><span class="eyebrow green-eyebrow">GESTIONA TUS TERRENOS</span><h1>Mis fincas</h1><p>Registra una finca y guarda su ubicación para tenerla siempre a la mano.</p></div><span class="heading-emoji">🌱</span></div>
+            <div class="content-grid">
+                <section class="panel form-panel"><div class="panel-heading"><span class="panel-icon green-icon">＋</span><div><h2>Registrar finca</h2><p>Completa los datos de tu terreno.</p></div></div>
+                    <form th:action="@{/fincas}" method="post" class="form-stack">
+                        <label for="nombre">Nombre de la finca</label><input id="nombre" name="nombre" type="text" maxlength="100" placeholder="Ej. Finca El Cacao" required>
+                        <div class="coordinates-head"><label>Ubicación de la finca</label><button class="text-button" type="button" data-geolocate>◎ Obtener ubicación</button></div>
+                        <p class="field-help">Puedes usar la ubicación de tu dispositivo o ingresar las coordenadas manualmente.</p>
+                        <div class="form-row"><div><label for="latitud">Latitud</label><input id="latitud" name="latitud" type="number" step="any" min="-90" max="90" placeholder="7.661000" required></div><div><label for="longitud">Longitud</label><input id="longitud" name="longitud" type="number" step="any" min="-180" max="180" placeholder="-76.684000" required></div></div>
+                        <p class="location-message" data-location-message aria-live="polite"></p>
+                        <button class="button button-primary button-full" type="submit">Guardar finca <span>→</span></button>
+                    </form>
+                </section>
+                <section class="panel list-panel"><div class="panel-heading"><span class="panel-icon pale-icon">🌿</span><div><h2>Fincas registradas</h2><p><span th:text="${fincas.size()}">0</span> terrenos en tu cuenta</p></div></div>
+                    <div class="empty-state" th:if="${#lists.isEmpty(fincas)}"><span>🌱</span><strong>Aún no tienes fincas</strong><p>Registra tu primera finca para comenzar.</p></div>
+                    <article class="farm-card" th:each="finca : ${fincas}"><div class="farm-card-top"><div class="farm-symbol">🌿</div><div class="farm-title"><h3 th:text="${finca.nombre}">Finca</h3><span>Productor: <b th:text="${finca.productor.nombre}">Productor</b></span></div><form th:action="@{/fincas/{id}/eliminar(id=${finca.id})}" method="post" data-confirm="¿Deseas eliminar esta finca y sus registros asociados?"><button class="icon-button delete-icon" type="submit" aria-label="Eliminar finca">⌫</button></form></div><div class="coordinate-pills"><span>⌖ <b th:text="${finca.latitud}">0</b></span><span>⌖ <b th:text="${finca.longitud}">0</b></span></div></article>
+                </section>
+            </div>
+        </div>
+    </main>
+</div><script th:src="@{/js/app.js}"></script></body></html>

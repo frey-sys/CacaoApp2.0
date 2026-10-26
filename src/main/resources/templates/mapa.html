@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mapa | CacaoApp</title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body class="app-page"><div class="app-shell">
+    <div th:replace="~{fragments :: sidebar(${activePage}, ${userName})}"></div>
+    <main class="main-content"><header class="topbar"><div class="mobile-brand"><span>🌿</span> CacaoApp</div><div class="breadcrumb">Gestión <span>/</span> Mapa</div><div class="topbar-user"><span class="online-dot"></span> En línea</div></header>
+        <div class="page-content"><div class="page-heading"><div><span class="eyebrow green-eyebrow">UBICACIÓN DE TUS TERRENOS</span><h1>Mapa de fincas</h1><p>Consulta las fincas que has registrado y sus coordenadas.</p></div><span class="heading-emoji">📍</span></div>
+            <section class="panel map-panel"><div class="map-visual"><div class="map-water"></div><span class="map-label label-town">CHIGORODÓ</span><span class="map-label label-river">RÍO CHIGORODÓ</span><span class="map-road road-one"></span><span class="map-road road-two"></span><span class="map-road road-three"></span>
+                    <span class="map-marker" th:each="finca,iter : ${fincas}" th:style="|left: ${15 + (iter.index * 17) % 75}%; top: ${20 + (iter.index * 23) % 60}%|"><span>🌱</span><b th:text="${finca.nombre}">Finca</b></span>
+                    <div class="map-empty-overlay" th:if="${#lists.isEmpty(fincas)}"><span>📍</span><strong>Sin fincas en el mapa</strong><p>Registra una finca para verla aquí.</p><a class="button button-primary" th:href="@{/fincas}">Registrar finca</a></div>
+                </div><div class="map-legend"><span><i></i> Fincas registradas</span><span>Vista esquemática de tus ubicaciones</span></div></section>
+            <div class="section-heading"><div><h2>Fincas en el mapa</h2><p>Coordenadas guardadas en tu cuenta.</p></div><a class="text-button" th:href="@{/fincas}">＋ Nueva finca</a></div>
+            <section class="map-farm-grid"><article class="map-farm-card" th:each="finca : ${fincas}"><span class="farm-symbol">📍</span><div><h3 th:text="${finca.nombre}">Finca</h3><p>Latitud <b th:text="${finca.latitud}"></b> · Longitud <b th:text="${finca.longitud}"></b></p></div></article></section>
+        </div>
+    </main>
+</div><script th:src="@{/js/app.js}"></script></body></html>

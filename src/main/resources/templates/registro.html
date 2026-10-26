@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Crear cuenta | CacaoApp</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="auth-page">
+<main class="auth-shell">
+    <section class="auth-intro">
+        <a class="brand brand-light" th:href="@{/login}">
+            <span class="brand-mark">🌿</span>
+            <span><strong>CacaoApp</strong><small>Tu finca siempre contigo</small></span>
+        </a>
+        <div class="intro-copy">
+            <span class="eyebrow">BIENVENIDO A LA COMUNIDAD</span>
+            <h1>Cultivemos juntos<br><em>un gran futuro.</em></h1>
+            <p>Crea tu cuenta y comienza a organizar la información de tus fincas y tus cosechas.</p>
+            <div class="intro-leaf">🍃</div>
+        </div>
+        <span class="intro-foot">CacaoApp · Gestión sencilla de tu finca</span>
+    </section>
+    <section class="auth-panel">
+        <div class="auth-form-wrap">
+            <a class="back-link" th:href="@{/login}">← Volver al inicio de sesión</a>
+            <span class="eyebrow green-eyebrow">COMIENZA AQUÍ</span>
+            <h2>Crear cuenta</h2>
+            <p class="muted">Ingresa tus datos para unirte a CacaoApp.</p>
+            <div th:replace="~{fragments :: flashes}"></div>
+            <form th:action="@{/registro}" method="post" class="form-stack">
+                <label for="nombre">Nombre completo</label>
+                <input id="nombre" name="nombre" type="text" placeholder="Ej. Carlos Andrade" maxlength="150" autocomplete="name" required>
+                <label for="email">Correo electrónico</label>
+                <input id="email" name="email" type="email" placeholder="tu@correo.com" maxlength="265" autocomplete="email" required>
+                <div class="form-row">
+                    <div><label for="telefono">Teléfono</label><input id="telefono" name="telefono" type="tel" placeholder="300 000 0000" maxlength="30"></div>
+                    <div><label for="municipio">Municipio</label><input id="municipio" name="municipio" type="text" placeholder="Tu municipio" maxlength="100"></div>
+                </div>
+                <label for="password">Contraseña <span class="label-hint">Mínimo 8 caracteres</span></label>
+                <input id="password" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required>
+                <label for="confirmPassword">Confirmar contraseña</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" minlength="8" maxlength="72" autocomplete="new-password" required>
+                <button class="button button-primary button-full" type="submit">Crear mi cuenta <span>→</span></button>
+            </form>
+            <p class="auth-switch">¿Ya tienes cuenta? <a th:href="@{/login}">Iniciar sesión</a></p>
+        </div>
+    </section>
+</main>
+</body>
+</html>

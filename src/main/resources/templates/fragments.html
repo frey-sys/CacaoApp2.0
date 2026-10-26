@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside class="sidebar" th:fragment="sidebar(activePage, userName)">
+    <a class="brand" th:href="@{/inicio}">
+        <span class="brand-mark">🌿</span>
+        <span><strong>CacaoApp</strong><small>Gestión cacaotera</small></span>
+    </a>
+    <div class="sidebar-caption">MENÚ PRINCIPAL</div>
+    <nav class="nav-list" aria-label="Navegación principal">
+        <a th:href="@{/inicio}" th:classappend="${activePage == 'inicio'} ? ' active' : ''"><span>⌂</span> Inicio</a>
+        <a th:href="@{/fincas}" th:classappend="${activePage == 'fincas'} ? ' active' : ''"><span>🌱</span> Mis fincas</a>
+        <a th:href="@{/mapa}" th:classappend="${activePage == 'mapa'} ? ' active' : ''"><span>⌖</span> Mapa</a>
+        <a th:href="@{/rutas}" th:classappend="${activePage == 'rutas'} ? ' active' : ''"><span>↗</span> Rutas</a>
+        <a th:href="@{/calidad}" th:classappend="${activePage == 'calidad'} ? ' active' : ''"><span>◉</span> Calidad del grano</a>
+    </nav>
+    <div class="sidebar-bottom">
+        <div class="user-avatar" th:text="${#strings.substring(userName, 0, 1).toUpperCase()}">U</div>
+        <div class="user-details"><strong th:text="${userName}">Usuario</strong><small>Productor de cacao</small></div>
+        <form th:action="@{/logout}" method="post">
+            <button class="icon-button" type="submit" title="Cerrar sesión" aria-label="Cerrar sesión">↪</button>
+        </form>
+    </div>
+</aside>
+
+<div class="flash-stack" th:fragment="flashes">
+    <div class="flash success" th:if="${success}" th:text="${success}"></div>
+    <div class="flash error" th:if="${error}" th:text="${error}"></div>
+</div>
+</body>
+</html>
